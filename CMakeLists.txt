@@ -1,44 +1,11 @@
 # == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 1.5.1)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
+
 # ====================================================================================
 # == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 1.5.1)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
+
 # ====================================================================================
 # == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 1.5.1)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
+
 # ====================================================================================
 # Generated Cmake Pico project file
 
@@ -52,18 +19,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # (note this can come from environment, CMake cache etc)
 
 # == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 1.5.1)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
+
 # ====================================================================================
 set(PICO_BOARD pico_w CACHE STRING "Board type")
 
@@ -77,20 +33,20 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(led_control_webserver led_control_webserver.c lib/ssd1306.c )
+add_executable((${PROJECT_NAME} led_control_webserver.c lib/ssd1306.c )
 
-pico_set_program_name(led_control_webserver "led_control_webserver")
-pico_set_program_version(led_control_webserver "0.1")
+pico_set_program_name((${PROJECT_NAME} "led_control_webserver")
+pico_set_program_version((${PROJECT_NAME} "0.1")
 
 # Generate PIO header
-pico_generate_pio_header(led_control_webserver ${CMAKE_CURRENT_LIST_DIR}/ws2818b.pio)
+pico_generate_pio_header((${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/ws2818b.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(led_control_webserver 0)
-pico_enable_stdio_usb(led_control_webserver 1)
+pico_enable_stdio_uart((${PROJECT_NAME} 0)
+pico_enable_stdio_usb((${PROJECT_NAME} 1)
 
 # Add the standard library to the build
-target_link_libraries(led_control_webserver
+target_link_libraries((${PROJECT_NAME}
         pico_stdlib
         hardware_gpio
         hardware_adc
@@ -102,14 +58,14 @@ target_link_libraries(led_control_webserver
 )
 
 # Add the standard include files to the build
-target_include_directories(led_control_webserver PRIVATE
+target_include_directories((${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${PICO_SDK_PATH}/lib/lwip/src/include
     ${PICO_SDK_PATH}/lib/lwip/src/include/arch
     ${PICO_SDK_PATH}/lib/lwip/src/include/lwip
 )
 
-target_sources(led_control_webserver PRIVATE
+target_sources((${PROJECT_NAME} PRIVATE
     ${PICO_SDK_PATH}/lib/lwip/src/apps/http/httpd.c
     ${PICO_SDK_PATH}/lib/lwip/src/apps/http/fs.c
 )
@@ -117,4 +73,4 @@ target_sources(led_control_webserver PRIVATE
 
 # Add any user requested libraries
 
-pico_add_extra_outputs(led_control_webserver)
+pico_add_extra_outputs((${PROJECT_NAME})
