@@ -43,8 +43,8 @@ ssd1306_t ssd;
 #define LED_PINX 7
 
 // Credenciais WIFI - Tome cuidado se publicar no github!
-#define WIFI_SSID "XXXXXXX"
-#define WIFI_PASSWORD "senha do usuário"
+#define WIFI_SSID "XXXXXXXX"
+#define WIFI_PASSWORD "Senha do usuario"
 
 // Definição dos pinos dos LEDs
 #define LED_PIN CYW43_WL_GPIO_LED_PIN   // GPIO do CI CYW43
@@ -162,6 +162,69 @@ void anima_one(){
 
 }
 
+// Novo
+
+void anima_two(){
+
+    npSetLED(24, 0, 255, 0); // Define o LED de índice 12 para vermelho.
+    npWrite();
+    sleep_ms(250);
+    npSetLED(15, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(16, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(13, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(12, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(7, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(8, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(1, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(0, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(9, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(10, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(19, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(20, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(2, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(3, 0, 255, 0);
+    npWrite();
+    sleep_ms(250);
+    npSetLED(4, 0, 255, 0);
+    npWrite();
+    //sleep_ms(250);
+
+
+
+
+    sleep_ms(1000);
+    npClear();
+    npWrite();
+
+
+}
+
 
 
 
@@ -232,6 +295,36 @@ void play_star_wars(uint pin) {
     }
 }
 
+
+//NOVO
+// Notas musicais para a parte introdutória de Für Elise
+const uint fur_elise_notes[] = {
+    659, 622, 659, 622, 659, 494, 587, 523,
+    440, 0, 330, 440, 523, 0, 330, 523,
+    587, 0, 330, 587, 659, 622, 659, 622,
+    659, 494, 587, 523, 440, 0, 330, 440,
+    523, 0, 330, 523, 587, 523, 440, 0
+};
+
+// Duração das notas em milissegundos
+const uint fur_elise_duration[] = {
+    200, 200, 200, 200, 200, 200, 200, 200,
+    400, 200, 200, 200, 400, 200, 200, 200,
+    400, 200, 200, 200, 200, 200, 200, 200,
+    200, 200, 200, 200, 400, 200, 200, 200,
+    400, 200, 200, 200, 400, 200, 400, 200
+};
+
+// Função para tocar Für Elise
+void play_fur_elise(uint pin) {
+    for (int i = 0; i < sizeof(fur_elise_notes) / sizeof(fur_elise_notes[0]); i++) {
+        if (fur_elise_notes[i] == 0) {
+            sleep_ms(fur_elise_duration[i]); // Pausa para notas com frequência 0
+        } else {
+            play_tone(pin, fur_elise_notes[i], fur_elise_duration[i]);
+        }
+    }
+}
 
 // Inicializar os Pinos GPIO para acionamento dos LEDs da BitDogLab
 void gpio_led_bitdog(void);
@@ -411,21 +504,36 @@ void user_request(char **request){
         ssd1306_send_data(&ssd);
 
     }
-    else if (strstr(*request, "GET /green_on") != NULL)
+    else if (strstr(*request, "GET /music_02") != NULL)
     {
-        gpio_put(LED_GREEN_PIN, 1);
+        play_fur_elise(BUZZER_PIN);
     }
-    else if (strstr(*request, "GET /green_off") != NULL)
-    {
-        gpio_put(LED_GREEN_PIN, 0);
+    else if (strstr(*request, "GET /display_02") != NULL)
+    {//NOVO
+       sleep_ms(200);
+    // Limpa o display. O display inicia com todos os pixels apagados.
+        ssd1306_fill(&ssd, false);
+        ssd1306_send_data(&ssd);
+
+        ssd1306_draw_string(&ssd, "O que e um", 24, 20);
+        ssd1306_draw_string(&ssd, "pontinho preto?", 8, 30);
+        ssd1306_draw_string(&ssd, "Um byte!", 40, 50);
+
+        ssd1306_send_data(&ssd);
+
+
+        sleep_ms(4000);
+    // Limpa o display. O display inicia com todos os pixels apagados.
+        ssd1306_fill(&ssd, false);
+        ssd1306_send_data(&ssd);
     }
     else if (strstr(*request, "GET /animation_01") != NULL)
     {
         anima_one();
     }
-    else if (strstr(*request, "GET /red_off") != NULL)
+    else if (strstr(*request, "GET /animation_02") != NULL)
     {
-       // gpio_put(LED_RED_PIN, 0);
+       anima_two();
     }
     else if (strstr(*request, "GET /on") != NULL)
     {
@@ -482,7 +590,7 @@ static err_t tcp_server_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
              "<head>\n"
              "<title> Embarcatech - Smart house simulator </title>\n"
              "<style>\n"
-             "body { background-color: #b5e5fb; font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }\n"
+             "body { background-color:rgb(251, 181, 181); font-family: Times New Roman, serif; text-align: center; margin-top: 50px;  }\n"
              "h1 { font-size: 64px; margin-bottom: 30px; }\n"
              "button { background-color: LightGray; font-size: 36px; margin: 10px; padding: 20px 40px; border-radius: 10px; }\n"
              ".temperature { font-size: 48px; margin-top: 30px; color: #333; }\n"
@@ -492,10 +600,10 @@ static err_t tcp_server_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
              "<h1>Embarcatech:Smart House Simulator</h1>\n"
              "<form action=\"./music_01\"><button>Tocar Musica 1</button></form>\n"
              "<form action=\"./display_01\"><button>Piada 1</button></form>\n"
-             "<form action=\"./green_on\"><button>Ligar Verde</button></form>\n"
-             "<form action=\"./green_off\"><button>Desligar Verde</button></form>\n"
+             "<form action=\"./music_02\"><button>Musica 2</button></form>\n"
+             "<form action=\"./display_02\"><button>Piada 2</button></form>\n"
              "<form action=\"./animation_01\"><button>Animation 1</button></form>\n"
-             "<form action=\"./red_off\"><button>Botao extra</button></form>\n"
+             "<form action=\"./animation_02\"><button>Animation 2</button></form>\n"
              "<p class=\"temperature\">Temperatura Interna: %.2f &deg;C</p>\n"
              "</body>\n"
              "</html>\n",
